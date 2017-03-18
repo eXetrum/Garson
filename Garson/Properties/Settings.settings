@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Garson.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ApiKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ee67215d0e838b70e516f38dfd59cb3e</Value>
+    </Setting>
+    <Setting Name="UserName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Vusale</Value>
+    </Setting>
+    <Setting Name="SiteUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">wow-picture.ru</Value>
+    </Setting>
+    <Setting Name="Folder" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>
