@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -31,6 +32,32 @@ namespace Garson
 		{
 			InitializeComponent();
 			listView.ItemsSource = records;
+			CommandBinding cb = new CommandBinding(ApplicationCommands.Copy, CopyCmdExecuted, CopyCmdCanExecute);
+			listView.CommandBindings.Add(cb);
+		}
+
+		void CopyCmdExecuted(object target, ExecutedRoutedEventArgs e)
+		{
+			ListView lw = e.OriginalSource as ListView;
+			string copyContent = String.Empty;
+			// The SelectedItems could be ListBoxItem instances or data bound objects depending on how you populate the ListBox.  
+			foreach (ResultInfo info in lw.SelectedItems)
+			{
+				copyContent += info.Link;
+
+				// Add a NewLine for carriage return  
+				copyContent += Environment.NewLine;
+			}
+			Clipboard.SetText(copyContent);
+		}
+		void CopyCmdCanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			ListBox lb = e.OriginalSource as ListBox;
+			// CanExecute only if there is one or more selected Item.  
+			if (lb.SelectedItems.Count > 0)
+				e.CanExecute = true;
+			else
+				e.CanExecute = false;
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -259,9 +286,11 @@ namespace Garson
 			Dispatcher.BeginInvoke(new Action(() => {
 				records.Add(info);
 			}));
+			
 
 			if (info.EventType == WatcherChangeTypes.Created)
 			{
+				info.UploadStatus = Upload.UploadStatus.WAITING;
 				string filePath = System.IO.Path.Combine(Settings.Default.Folder, info.FileName);
 				if (GetIdleFile(filePath) == false)
 				{
@@ -269,16 +298,22 @@ namespace Garson
 				}
 
 				Upload upload = new Upload(Settings.Default.ApiKey, Settings.Default.UserName, Settings.Default.SiteUrl, Settings.Default.Folder);
-				info.UploadStatus = upload.UploadPicture(filePath);
+				Upload.UploadResult result = upload.UploadPicture(filePath);
+				info.UploadStatus = result.status;
+				info.Link = result.url;
+				
 			}
 		}
 
 
 		void DisplayFileSystemWatcherInfo(System.IO.WatcherChangeTypes watcherChangeTypes, string name, string oldName = null)
 		{
-			Thread th = new Thread(ProcessItem);
-			th.IsBackground = true;
-			th.Start(new ResultInfo(name, watcherChangeTypes));
+			if (watcherChangeTypes == System.IO.WatcherChangeTypes.Created)
+			{
+				Thread th = new Thread(ProcessItem);
+				th.IsBackground = true;
+				th.Start(new ResultInfo(name, watcherChangeTypes));
+			}
 
 			//if (watcherChangeTypes == System.IO.WatcherChangeTypes.Renamed)
 			//{
@@ -293,6 +328,5 @@ namespace Garson
 			//	Dispatcher.BeginInvoke(new Action(() => { AddListLine(string.Format("{0} -> {1} - {2}", watcherChangeTypes.ToString(), name, DateTime.Now)); }));
 			//}
 		}
-
 	}
 }

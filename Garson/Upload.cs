@@ -16,8 +16,16 @@ namespace Garson
 		{
 			OK,
 			FAILURE,
+			WAITING,
 			NONE
 		}
+
+		public class UploadResult
+		{
+			public UploadStatus status;
+			public string url;
+		}
+
 		NameValueCollection values = new NameValueCollection();
 		string apiKey;
 		string userName;
@@ -47,8 +55,9 @@ namespace Garson
 			values.Add("format", "json");		
 		}
 
-		public UploadStatus UploadPicture(string filePath)
+		public UploadResult UploadPicture(string filePath)
 		{
+			UploadResult result = new UploadResult();
 			NameValueCollection files = new NameValueCollection();
 			files.Add("source", filePath);
 			string jsonStr = sendHttpRequest(siteUrl + "?key=" + apiKey, values, files);
@@ -56,10 +65,26 @@ namespace Garson
 			try
 			{
 				Dictionary<string, object> resultJsonObj = new Dictionary<string, object>(Json.JsonParser.FromJson(jsonStr));
-				if ((int)resultJsonObj["status_code"] == 200) return UploadStatus.OK;
+
+				//resultJsonObj["image"]
+				Dictionary<string, object> img = (Dictionary<string, object>)resultJsonObj["image"];
+				result.url = (string)img["url"]; //["url_viewer"]
+
+				/*foreach (var p in resultJsonObj)
+				{
+					System.Windows.MessageBox.Show(p.Key + " " + p.Value);
+				}*/
+				//System.Windows.MessageBox.Show(resultJsonObj["status_code"].ToString());
+				int statusCode = int.Parse(resultJsonObj["status_code"].ToString());
+				if (statusCode == 200) {
+					result.status = UploadStatus.OK;
+					return result;
+				}
+
 			}
 			catch (Exception) { }
-			return UploadStatus.FAILURE;
+			result.status = UploadStatus.FAILURE;
+			return result;
 		}
 		private string sendHttpRequest(string url, NameValueCollection values, NameValueCollection files = null)
 		{

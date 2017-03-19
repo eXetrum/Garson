@@ -14,3 +14,19 @@ D:\visual studio 2015\Projects\C#\Garson\Garson\obj\Debug\Garson.exe
 D:\visual studio 2015\Projects\C#\Garson\Garson\obj\Debug\Garson.pdb
 D:\visual studio 2015\Projects\C#\Garson\Garson\bin\Debug\Json.dll
 D:\visual studio 2015\Projects\C#\Garson\Garson\bin\Debug\Json.pdb
+D:\Clients\Dagilis\Garson\Garson\bin\Debug\Garson.exe.config
+D:\Clients\Dagilis\Garson\Garson\obj\Debug\Garson.exe
+D:\Clients\Dagilis\Garson\Garson\obj\Debug\Garson.pdb
+D:\Clients\Dagilis\Garson\Garson\bin\Debug\Garson.exe
+D:\Clients\Dagilis\Garson\Garson\bin\Debug\Garson.pdb
+D:\Clients\Dagilis\Garson\Garson\bin\Debug\Json.dll
+D:\Clients\Dagilis\Garson\Garson\bin\Debug\Json.pdb
+D:\Clients\Dagilis\Garson\Garson\obj\Debug\Garson.csprojResolveAssemblyReference.cache
+D:\Clients\Dagilis\Garson\Garson\obj\Debug\MainWindow.g.cs
+D:\Clients\Dagilis\Garson\Garson\obj\Debug\App.g.cs
+D:\Clients\Dagilis\Garson\Garson\obj\Debug\Garson_MarkupCompile.cache
+D:\Clients\Dagilis\Garson\Garson\obj\Debug\Garson_MarkupCompile.lref
+D:\Clients\Dagilis\Garson\Garson\obj\Debug\MainWindow.baml
+D:\Clients\Dagilis\Garson\Garson\obj\Debug\Garson.g.resources
+D:\Clients\Dagilis\Garson\Garson\obj\Debug\Garson.Properties.Resources.resources
+D:\Clients\Dagilis\Garson\Garson\obj\Debug\Garson.csproj.GenerateResource.Cache

@@ -14,6 +14,7 @@ namespace Garson
 		string fileName;
 		WatcherChangeTypes eventType;
 		Upload.UploadStatus uploadStatus;
+		string link;
 		
 		public ResultInfo(string fileName, WatcherChangeTypes eventType)
 		{
@@ -21,6 +22,7 @@ namespace Garson
 			this.FileName = fileName;
 			this.EventType = eventType;
 			this.UploadStatus = Upload.UploadStatus.NONE;
+			this.link = "";
 		}
 
 		public override bool Equals(object obj)
@@ -42,7 +44,8 @@ namespace Garson
 			return DateTime.Equals(p.DateTime)
 				&& FileName.Equals(p.FileName)
 				&& EventType.Equals(p.EventType)
-				&& UploadStatus.Equals(p.UploadStatus);
+				&& UploadStatus.Equals(p.UploadStatus)
+				&& Link.Equals(p.Link);
 		}
 
 		public bool Equals(ResultInfo p)
@@ -57,7 +60,8 @@ namespace Garson
 			return DateTime.Equals(p.DateTime)
 				&& FileName.Equals(p.FileName)
 				&& EventType.Equals(p.EventType)
-				&& UploadStatus.Equals(p.UploadStatus);
+				&& UploadStatus.Equals(p.UploadStatus)
+				&& Link.Equals(p.Link);
 		}
 
 		public override int GetHashCode()
@@ -65,7 +69,8 @@ namespace Garson
 			return DateTime.GetHashCode()
 				^ FileName.GetHashCode()
 				^ EventType.GetHashCode()
-				^ UploadStatus.GetHashCode();
+				^ UploadStatus.GetHashCode()
+				^ Link.GetHashCode();
 		}
 
 		public DateTime DateTime
@@ -125,6 +130,21 @@ namespace Garson
 				{
 					uploadStatus = value;
 					OnPropertyChanged("UploadStatus");
+				}
+			}
+		}
+		public string Link
+		{
+			get
+			{
+				return link;
+			}
+			set
+			{
+				if(value != link)
+				{
+					link = value;
+					OnPropertyChanged("Link");
 				}
 			}
 		}
