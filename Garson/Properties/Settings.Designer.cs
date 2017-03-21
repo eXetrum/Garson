@@ -70,5 +70,17 @@ namespace Garson.Properties {
                 this["Folder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("jpeg;jpg;png;gif")]
+        public string Filter {
+            get {
+                return ((string)(this["Filter"]));
+            }
+            set {
+                this["Filter"] = value;
+            }
+        }
     }
 }

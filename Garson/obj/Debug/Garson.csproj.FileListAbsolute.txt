@@ -29,3 +29,4 @@ D:\Clients\Dagilis\Garson\Garson\bin\Debug\Json.pdb
 D:\Clients\Dagilis\Garson\Garson\obj\Debug\Garson.Properties.Resources.resources
 D:\Clients\Dagilis\Garson\Garson\obj\Debug\Garson.csproj.GenerateResource.Cache
 D:\Clients\Dagilis\Garson\Garson\obj\Debug\Garson.exe
+D:\Clients\Dagilis\Garson\Garson\obj\Debug\Garson.csprojResolveAssemblyReference.cache

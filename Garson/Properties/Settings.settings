@@ -14,5 +14,8 @@
     <Setting Name="Folder" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="Filter" Type="System.String" Scope="User">
+      <Value Profile="(Default)">jpeg;jpg;png;gif</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

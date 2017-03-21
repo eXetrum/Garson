@@ -6,34 +6,38 @@
         xmlns:local="clr-namespace:Garson"
         mc:Ignorable="d"
 		xmlns:p="clr-namespace:Garson.Properties" 
-        Title="Garson" Height="460" Width="757" Closing="Window_Closing">
+        Title="Garson" Height="536" Width="757" Closing="Window_Closing">
 
 
 
 
 	<Grid>
-		<Button x:Name="buttonEnableSync" Content="Enable Sync" HorizontalAlignment="Left" Margin="10,254,0,0" VerticalAlignment="Top" Width="75" Click="buttonEnableSync_Click"/>
-		<Button x:Name="buttonDisableSync" Content="Disable Sync" IsEnabled="False" HorizontalAlignment="Left" Margin="90,254,0,0" VerticalAlignment="Top" Width="75" Click="buttonDisableSync_Click"/>
-		<GroupBox x:Name="groupBox" Header="Settings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="224" Width="461">
+		<Button x:Name="buttonEnableSync" Content="Enable Sync" HorizontalAlignment="Left" Margin="10,300,0,0" VerticalAlignment="Top" Width="75" Click="buttonEnableSync_Click"/>
+		<Button x:Name="buttonDisableSync" Content="Disable Sync" IsEnabled="False" HorizontalAlignment="Left" Margin="90,300,0,0" VerticalAlignment="Top" Width="75" Click="buttonDisableSync_Click"/>
+		<GroupBox x:Name="groupBox" Header="Settings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="265" Width="461">
 			<Grid Margin="0,0,-2,-3">
 				<TextBox x:Name="textBoxApiKey" IsEnabled="False" HorizontalAlignment="Left" Height="23" Margin="101,12,0,0" TextWrapping="Wrap" Text="{Binding ApiKey, Mode=TwoWay, Source={x:Static p:Settings.Default}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="240"/>
 				<TextBox x:Name="textBoxUserName" IsEnabled="False" HorizontalAlignment="Left" Height="23" Margin="101,60,0,0" TextWrapping="Wrap" Text="{Binding UserName, Mode=TwoWay, Source={x:Static p:Settings.Default}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="240"/>
 				<TextBox x:Name="textBoxSiteUrl" IsEnabled="False" HorizontalAlignment="Left" Height="23" Margin="101,110,0,0" TextWrapping="Wrap" Text="{Binding SiteUrl, Mode=TwoWay, Source={x:Static p:Settings.Default}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="240"/>
-				<TextBox x:Name="textBoxFolder" IsEnabled="False" HorizontalAlignment="Left" Height="23" Margin="101,160,0,-7" TextWrapping="Wrap" Text="{Binding Folder, Mode=TwoWay, Source={x:Static p:Settings.Default}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="240"/>
+				<TextBox x:Name="textBoxFilter" IsEnabled="False" HorizontalAlignment="Left" Height="23" Margin="101,160,0,0" TextWrapping="Wrap" Text="{Binding Filter, Mode=TwoWay, Source={x:Static p:Settings.Default}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="240"/>
+				<TextBox x:Name="textBoxFolder" IsEnabled="False" HorizontalAlignment="Left" Height="23" Margin="101,210,0,0" TextWrapping="Wrap" Text="{Binding Folder, Mode=TwoWay, Source={x:Static p:Settings.Default}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="240"/>
 
 				<Label x:Name="labelApiKey" Content="Api key" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
 				<Label x:Name="labelUserName" Content="Username" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top"/>
 				<Label x:Name="labelSiteUrl" Content="SiteUrl" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top"/>
-				<Label x:Name="labelFolder" Content="Folder" HorizontalAlignment="Left" Margin="10,157,0,-7" VerticalAlignment="Top"/>
+				<Label x:Name="labelFilter" Content="Filter" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top" />
+				<Label x:Name="labelFolder" Content="Folder" HorizontalAlignment="Left" Margin="10,210,0,0" VerticalAlignment="Top"/>
 
 				<Button x:Name="buttonEditApiKey" Content="Edit" HorizontalAlignment="Left" Margin="357,10,0,0" VerticalAlignment="Top" Width="75" Click="buttonEditApiKey_Click" />
 				<Button x:Name="buttonEditUserName" Content="Edit" HorizontalAlignment="Left" Margin="357,60,0,0" VerticalAlignment="Top" Width="75" Click="buttonEditUserName_Click" />
 				<Button x:Name="buttonEditSiteUrl" Content="Edit" HorizontalAlignment="Left" Margin="357,110,0,0" VerticalAlignment="Top" Width="75" Click="buttonEditSiteUrl_Click" />
-				<Button x:Name="buttonEditFolder" Content="Edit" HorizontalAlignment="Left" Margin="357,160,0,-6" VerticalAlignment="Top" Width="75" Click="buttonEditFolder_Click" />
+				<Button x:Name="buttonEditFilter" Content="Edit" HorizontalAlignment="Left" Margin="357,160,0,0" VerticalAlignment="Top" Width="75" Click="buttonEditFilter_Click" />
+				<Button x:Name="buttonEditFolder" Content="Edit" HorizontalAlignment="Left" Margin="357,210,0,0" VerticalAlignment="Top" Width="75" Click="buttonEditFolder_Click" />
+
 			</Grid>
 		</GroupBox>
-		<Separator HorizontalAlignment="Left" Height="15" Margin="10,234,0,0" VerticalAlignment="Top" Width="461"/>
-		<ListView ItemsSource="{Binding SourceCollection}" x:Name="listView" HorizontalAlignment="Left" Height="140" Margin="10,281,0,0" VerticalAlignment="Top" Width="729">
+		<Separator HorizontalAlignment="Left" Height="15" Margin="10,281,0,0" VerticalAlignment="Top" Width="461"/>
+		<ListView ItemsSource="{Binding SourceCollection}" x:Name="listView" HorizontalAlignment="Left" Height="169" Margin="10,327,0,0" VerticalAlignment="Top" Width="729">
 			<ListView.View>
 				<GridView>
 					<GridViewColumn Header="DateTime" DisplayMemberBinding="{Binding DateTime}" Width="140"/>

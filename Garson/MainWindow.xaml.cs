@@ -30,6 +30,7 @@ namespace Garson
 
 		ObservableCollection<ResultInfo> records = new ObservableCollection<ResultInfo>();
 		private static FileSystemWatcher fileSystemWatcher;
+		private List<string> filters = new List<string>();
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -193,6 +194,23 @@ namespace Garson
 			}
 		}
 
+		private void buttonEditFilter_Click(object sender, RoutedEventArgs e)
+		{
+			if (buttonEditFilter.Content.Equals("Save"))
+			{
+				textBoxFilter.IsEnabled = false;
+				buttonEditFilter.Content = "Edit";
+				this.Focus();
+			}
+			else
+			{
+				textBoxFilter.IsEnabled = true;
+				textBoxFilter.Focus();
+				buttonEditFilter.Content = "Save";
+			}
+		}
+
+
 		private void buttonEditFolder_Click(object sender, RoutedEventArgs e)
 		{
 			System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
@@ -211,42 +229,42 @@ namespace Garson
 		private void buttonEnableSync_Click(object sender, RoutedEventArgs e)
 		{
 			StartFileSystemWatcher();
-			buttonEnableSync.IsEnabled = false;
-			buttonDisableSync.IsEnabled = true;
-
-			buttonEditApiKey.IsEnabled = false;
-			buttonEditUserName.IsEnabled = false;
-			buttonEditSiteUrl.IsEnabled = false;
-			buttonEditFolder.IsEnabled = false;
+			
 		}
 
 		private void buttonDisableSync_Click(object sender, RoutedEventArgs e)
 		{
 			StopFileSystemWatcher();
-			buttonEnableSync.IsEnabled = true;
-			buttonDisableSync.IsEnabled = false;
-
-			buttonEditApiKey.IsEnabled = true;
-			buttonEditUserName.IsEnabled = true;
-			buttonEditSiteUrl.IsEnabled = true;
-			buttonEditFolder.IsEnabled = true;
+			
 		}
 
 		private void StartFileSystemWatcher()
 		{
+			StopFileSystemWatcher();
+
+			filters.Clear();
+			filters.AddRange(Properties.Settings.Default.Filter.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+			for (int i = 0; i < filters.Count; ++i)
+			{
+				filters[i] = filters[i].Trim(new char[] { ';', ' ', ',', '.', '\t', '\r', '\n' });
+			}
+			if (filters.Count == 0)
+			{
+				MessageBox.Show("Filters error");
+				return;
+			}
+
 			string folderPath = Settings.Default.Folder;
 
 			// If there is no folder selected, to nothing
 			if (string.IsNullOrWhiteSpace(folderPath))
 				return;
 
-			StopFileSystemWatcher();
-
 			// Recreate
 			fileSystemWatcher = new FileSystemWatcher();
 			// Set folder path to watch
 			fileSystemWatcher.Path = folderPath;
-			fileSystemWatcher.Filter = "*.jpg";
+			//fileSystemWatcher.Filter = "*.jpg";
 
 			// Gets or sets the type of changes to watch for.
 			// In this case we will watch change of filename, last modified time, size and directory name
@@ -267,6 +285,17 @@ namespace Garson
 
 			// START watching
 			fileSystemWatcher.EnableRaisingEvents = true;
+
+
+			// Visual components
+			buttonEnableSync.IsEnabled = false;
+			buttonDisableSync.IsEnabled = true;
+
+			buttonEditApiKey.IsEnabled = false;
+			buttonEditUserName.IsEnabled = false;
+			buttonEditSiteUrl.IsEnabled = false;
+			buttonEditFilter.IsEnabled = false;
+			buttonEditFolder.IsEnabled = false;
 		}
 		private void StopFileSystemWatcher()
 		{
@@ -278,6 +307,16 @@ namespace Garson
 			fileSystemWatcher.Renamed -= fileSystemWatcher_Renamed;
 			fileSystemWatcher.Dispose();
 			fileSystemWatcher = null;
+
+			// Visual components
+			buttonEnableSync.IsEnabled = true;
+			buttonDisableSync.IsEnabled = false;
+
+			buttonEditApiKey.IsEnabled = true;
+			buttonEditUserName.IsEnabled = true;
+			buttonEditSiteUrl.IsEnabled = true;
+			buttonEditFilter.IsEnabled = true;
+			buttonEditFolder.IsEnabled = true;
 		}
 
 		// ----------------------------------------------------------------------------------
@@ -397,7 +436,13 @@ namespace Garson
 		{
 			if (watcherChangeTypes == System.IO.WatcherChangeTypes.Created)
 			{
-				
+				//Console.WriteLine(System.IO.Path.GetExtension(name));
+				//foreach(var i in filters)
+				//{
+				//	Console.WriteLine(i);
+				//}
+				string ext = System.IO.Path.GetExtension(name).Trim(new char[] { ' ', '.', '\t', '\r', '\n' });
+				if (!filters.Contains(ext) && !filters.Contains("." + ext)) return;
 				Thread th = new Thread(ProcessItem);
 				th.IsBackground = true;
 				th.Start(new ResultInfo(name, watcherChangeTypes));
@@ -416,5 +461,7 @@ namespace Garson
 			//	Dispatcher.BeginInvoke(new Action(() => { AddListLine(string.Format("{0} -> {1} - {2}", watcherChangeTypes.ToString(), name, DateTime.Now)); }));
 			//}
 		}
+
+		
 	}
 }

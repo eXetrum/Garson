@@ -141,9 +141,6 @@
     <None Include="Images\DefaultState.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\Button-Synchronize-red.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Images\SyncState.ico" />
   </ItemGroup>
   <ItemGroup>
