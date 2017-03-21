@@ -60,10 +60,11 @@ namespace Garson
 			UploadResult result = new UploadResult();
 			NameValueCollection files = new NameValueCollection();
 			files.Add("source", filePath);
-			string jsonStr = sendHttpRequest(siteUrl + "?key=" + apiKey, values, files);
+			
 
 			try
 			{
+				string jsonStr = sendHttpRequest(siteUrl + "?key=" + apiKey, values, files);
 				Dictionary<string, object> resultJsonObj = new Dictionary<string, object>(Json.JsonParser.FromJson(jsonStr));
 
 				//resultJsonObj["image"]
@@ -83,6 +84,7 @@ namespace Garson
 
 			}
 			catch (Exception) { }
+			result.url = "";
 			result.status = UploadStatus.FAILURE;
 			return result;
 		}

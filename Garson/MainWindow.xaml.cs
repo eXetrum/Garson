@@ -26,6 +26,8 @@ namespace Garson
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		System.Windows.Forms.NotifyIcon notifyIcon = new System.Windows.Forms.NotifyIcon();
+
 		ObservableCollection<ResultInfo> records = new ObservableCollection<ResultInfo>();
 		private static FileSystemWatcher fileSystemWatcher;
 		public MainWindow()
@@ -34,35 +36,114 @@ namespace Garson
 			listView.ItemsSource = records;
 			CommandBinding cb = new CommandBinding(ApplicationCommands.Copy, CopyCmdExecuted, CopyCmdCanExecute);
 			listView.CommandBindings.Add(cb);
+			notifyIcon.Icon = Garson.Properties.Resources.DefaultState;
+			notifyIcon.Visible = true;
+			notifyIcon.DoubleClick +=
+				delegate (object sender, EventArgs args)
+				{
+					if (this.WindowState == WindowState.Normal)
+					{
+						this.Hide();
+						this.WindowState = WindowState.Minimized;
+					}
+					else if(this.WindowState == WindowState.Minimized)
+					{
+						this.Show();
+						this.WindowState = WindowState.Normal;
+					}
+				};
+			notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu();
+			notifyIcon.ContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+				new System.Windows.Forms.MenuItem("&Hide", Item_Click),
+				new System.Windows.Forms.MenuItem("&Exit", Item_Click)
+			});
+
+
+			RotateTransform rotateTransform = new RotateTransform(45);
+			//notifyIcon.Icon.
+				// img.RenderTransform = rotateTransform;
+
+		}
+
+		private void Item_Click(object sender, EventArgs e)
+		{
+			System.Windows.Forms.MenuItem item = sender as System.Windows.Forms.MenuItem;
+			if (item == null) return;
+			if(item.Text == "&Show")
+			{
+				item.Text = "&Hide";
+				this.Show();
+				this.WindowState = WindowState.Normal;
+			}
+			else if(item.Text == "&Hide")
+			{
+				item.Text = "&Show";
+				this.Hide();
+				this.WindowState = WindowState.Minimized;
+			}
+			else if(item.Text == "&Exit")
+			{
+				this.Close();
+			}
 		}
 
 		void CopyCmdExecuted(object target, ExecutedRoutedEventArgs e)
 		{
-			ListView lw = e.OriginalSource as ListView;
-			string copyContent = String.Empty;
-			// The SelectedItems could be ListBoxItem instances or data bound objects depending on how you populate the ListBox.  
-			foreach (ResultInfo info in lw.SelectedItems)
+			try
 			{
-				copyContent += info.Link;
+				ListView lw = e.OriginalSource as ListView;
+				string copyContent = String.Empty;
+				// The SelectedItems could be ListBoxItem instances or data bound objects depending on how you populate the ListBox.  
+				foreach (ResultInfo info in lw.SelectedItems)
+				{
+					copyContent += info.Link;
 
-				// Add a NewLine for carriage return  
-				copyContent += Environment.NewLine;
+					// Add a NewLine for carriage return  
+					copyContent += Environment.NewLine;
+				}
+				Clipboard.SetText(copyContent);
 			}
-			Clipboard.SetText(copyContent);
+			catch (Exception err)
+			{
+				MessageBox.Show(err.Message);
+			}
 		}
 		void CopyCmdCanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			ListBox lb = e.OriginalSource as ListBox;
-			// CanExecute only if there is one or more selected Item.  
-			if (lb.SelectedItems.Count > 0)
-				e.CanExecute = true;
-			else
-				e.CanExecute = false;
+			try
+			{
+				ListBox lb = e.OriginalSource as ListBox;
+				// CanExecute only if there is one or more selected Item.  
+				if (lb.SelectedItems.Count > 0)
+					e.CanExecute = true;
+				else
+					e.CanExecute = false;
+			}
+			catch(Exception err)
+			{
+				MessageBox.Show(err.Message);
+			}
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			Settings.Default.Save();
+			try
+			{
+				Settings.Default.Save();
+				if (notifyIcon != null)
+				{
+					notifyIcon.Visible = false;
+					if (notifyIcon.Icon != null)
+					{
+						notifyIcon.Icon.Dispose();
+						notifyIcon.Icon = null;
+					}
+						notifyIcon.Dispose();
+						notifyIcon = null;
+				}
+				StopFileSystemWatcher();
+			}
+			catch (Exception err) { MessageBox.Show(err.Message); }
 		}
 		private void buttonEditApiKey_Click(object sender, RoutedEventArgs e)
 		{
@@ -285,6 +366,7 @@ namespace Garson
 
 			Dispatcher.BeginInvoke(new Action(() => {
 				records.Add(info);
+				notifyIcon.Icon = Garson.Properties.Resources.SyncState;
 			}));
 			
 
@@ -303,6 +385,11 @@ namespace Garson
 				info.Link = result.url;
 				
 			}
+
+			Dispatcher.BeginInvoke(new Action(() =>
+			{
+				notifyIcon.Icon = Garson.Properties.Resources.DefaultState;
+			}));
 		}
 
 
@@ -310,6 +397,7 @@ namespace Garson
 		{
 			if (watcherChangeTypes == System.IO.WatcherChangeTypes.Created)
 			{
+				
 				Thread th = new Thread(ProcessItem);
 				th.IsBackground = true;
 				th.Start(new ResultInfo(name, watcherChangeTypes));
